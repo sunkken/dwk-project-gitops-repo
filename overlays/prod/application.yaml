@@ -6,19 +6,22 @@ metadata:
 spec:
   project: default
   sources:
-    - repoURL: https://github.com/sunkken/devops_kubernetes
-      path: "the-project/overlays/prod"
+    - repoURL: https://github.com/sunkken/dwk-project-gitops-repo
+      path: "overlays/prod"
       targetRevision: ">=4.8"
       ref: git-prod
+
     - repoURL: https://charts.bitnami.com/bitnami
       chart: nats
       targetRevision: "9.0.28"
       helm:
         valueFiles:
-          - $git-prod/the-project/base/nats-values.yaml
+          - $git-prod/base/nats-values.yaml
+
   destination:
-    server: "https://kubernetes.default.svc"
+    server: https://kubernetes.default.svc
     namespace: the-project-prod
+
   syncPolicy:
     automated:
       prune: true
