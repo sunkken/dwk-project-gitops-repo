@@ -11,19 +11,19 @@ resources:
 images:
 - name: PROJECT/todo-app
   newName: europe-north1-docker.pkg.dev/dwk-gke-478610/dwk-docker-repository/todo-app
-  newTag: "4.9"
+  newTag: "4.10"
 - name: PROJECT/todo-app-writer
   newName: europe-north1-docker.pkg.dev/dwk-gke-478610/dwk-docker-repository/todo-app-writer
-  newTag: "4.9"
+  newTag: "4.10"
 - name: PROJECT/todo-backend
   newName: europe-north1-docker.pkg.dev/dwk-gke-478610/dwk-docker-repository/todo-backend
-  newTag: "4.9"
+  newTag: "4.10"
 - name: PROJECT/todo-broadcaster
   newName: europe-north1-docker.pkg.dev/dwk-gke-478610/dwk-docker-repository/todo-broadcaster
-  newTag: "4.9"
+  newTag: "4.10"
 - name: PROJECT/todo-cronjob
   newName: europe-north1-docker.pkg.dev/dwk-gke-478610/dwk-docker-repository/todo-cronjob
-  newTag: "4.9"
+  newTag: "4.10"
 - name: PROJECT/tododb-backup
   newName: europe-north1-docker.pkg.dev/dwk-gke-478610/dwk-docker-repository/tododb-backup
-  newTag: "4.9"
+  newTag: "4.10"
