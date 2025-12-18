@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: the-project-staging
+  namespace: argocd
+spec:
+  project: default
+  sources:
+    - repoURL: https://github.com/sunkken/devops_kubernetes
+      path: "the-project/overlays/staging"
+      targetRevision: main
+      ref: git-staging
+    - repoURL: https://charts.bitnami.com/bitnami
+      chart: nats
+      targetRevision: "9.0.28"
+      helm:
+        valueFiles:
+          - $git-staging/the-project/base/nats-values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: the-project-staging
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

@@ -1,0 +1,97 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: todo-app
+  labels:
+    app: todo-app
+spec:
+  replicas: 1
+  serviceName: todo-app-svc
+  selector:
+    matchLabels:
+      app: todo-app
+  template:
+    metadata:
+      labels:
+        app: todo-app
+    spec:
+      containers:
+        - name: todo-app-writer
+          image: PROJECT/todo-app-writer
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: 25m
+              memory: 32Mi
+            limits:
+              cpu: 75m
+              memory: 128Mi
+          volumeMounts:
+            - name: image-storage
+              mountPath: /usr/src/app/image
+          livenessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - find /usr/src/app/image -type f -mmin -15 | grep -q .
+            initialDelaySeconds: 120
+            periodSeconds: 300
+            timeoutSeconds: 5
+            failureThreshold: 3
+          envFrom:
+          - configMapRef:
+              name: todo-config
+        - name: todo-app
+          image: PROJECT/todo-app
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: 25m
+              memory: 32Mi
+            limits:
+              cpu: 75m
+              memory: 128Mi
+          ports:
+            - containerPort: 3000
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 3
+          volumeMounts:
+            - name: image-storage
+              mountPath: /usr/src/app/image
+          envFrom:
+            - configMapRef:
+                name: todo-config
+  volumeClaimTemplates:
+    - metadata:
+        name: image-storage
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-app-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: todo-app
+  ports:
+    - port: 1234
+      protocol: TCP
+      targetPort: 3000
