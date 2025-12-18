@@ -8,7 +8,7 @@ spec:
   sources:
     - repoURL: https://github.com/sunkken/dwk-project-gitops-repo
       path: "overlays/staging"
-      targetRevision: main
+      targetRevision: staging
       ref: git-staging
 
     - repoURL: https://charts.bitnami.com/bitnami
